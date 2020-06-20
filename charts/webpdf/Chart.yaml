@@ -1,0 +1,3 @@
+name: webpdf
+description: cronjob for creating pdf reports from websites
+version: 0.1.0

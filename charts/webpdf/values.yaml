@@ -1,0 +1,20 @@
+image: kavatech/webpdf:v0.1.0
+schedule: ''
+restartPolicy: 'OnFailure'
+url: ''
+callback:
+  http:
+    url: ''
+    method: 'POST'
+  smtp:
+    from: ''
+    to: []
+    cc: []
+    bcc: []
+    subject: 'webpdf report'
+    user: ''
+    password: ''
+    host: ''
+    port: '587'
+    body: 'see attachment'
+    attachmentName: 'report.pdf'

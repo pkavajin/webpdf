@@ -1,0 +1,49 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Release.name}}-webpdf
+spec:
+  schedule: "{{ .Values.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: webpdf
+            image: "{{ .Values.image }}"
+            env:
+            - name: URL
+              value: '{{ .Values.url }}'
+            - name: CALLBACK_HTTP_URL
+              value: '{{ .Values.callback.http.url }}'
+            - name: CALLBACK_HTTP_METHOD
+              value: '{{ .Values.callback.http.method }}'
+            - name: CALLBACK_SMTP_FROM
+              value: '{{ .Values.callback.smtp.from }}'
+            - name: CALLBACK_SMTP_TO
+              value: '{{ join "," .Values.callback.smtp.to }}'
+            - name: CALLBACK_SMTP_CC
+              value: '{{ join "," .Values.callback.smtp.cc }}'
+            - name: CALLBACK_SMTP_BCC
+              value: '{{ join "," .Values.callback.smtp.bcc }}'
+            - name: CALLBACK_SMTP_SUBJECT
+              value: '{{ .Values.callback.smtp.subject }}'
+            - name: CALLBACK_SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.name}}-webpdf"
+                  key: user
+            - name: CALLBACK_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.name}}-webpdf"
+                  key: password
+            - name: CALLBACK_SMTP_HOST
+              value: '{{ .Values.callback.smtp.host }}'
+            - name: CALLBACK_SMTP_PORT
+              value: '{{ .Values.callback.smtp.port }}'
+            - name: CALLBACK_SMTP_BODY
+              value: '{{ .Values.callback.smtp.body }}'
+            - name: CALLBACK_SMTP_ATTACHMENTNAME
+              value: '{{ .Values.callback.smtp.attachmentName }}'
+          restartPolicy: {{ .Values.restartPolicy }}
